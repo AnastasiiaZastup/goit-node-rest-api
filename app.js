@@ -5,6 +5,8 @@ const dotenv = require("dotenv").config();
 const mongoose = require("mongoose");
 const contactsRouter = require("./routes/contactsRouter/contactsRouter.js");
 const usersRouter = require("./routes/usersRouter/usersRouter.js");
+const path = require("path");
+const authMiddleware = require("./middleWares/authMiddleWare.js");
 
 const { DB_HOST } = process.env;
 
@@ -14,7 +16,9 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use("/api/contacts", authMiddleware, contactsRouter);
 app.use("/users", usersRouter);
 
 app.use((_, res) => {
@@ -38,3 +42,5 @@ mongoose
     console.error(err.message);
     process.exit(1);
   });
+
+module.exports = app;
