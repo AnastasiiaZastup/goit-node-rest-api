@@ -8,28 +8,27 @@ const authMiddleware = async (req, res, next) => {
   const [type, token] = authHeader.split(" ");
 
   if (type !== "Bearer" || !token) {
-    return next(new HttpError(401, "Not authorized"));
+    throw HttpError(401, "Not authorized");
   }
 
   try {
-    const decodedToken = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decodedToken.id);
+    const { id } = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(id);
 
     if (!user) {
-      return next(new HttpError(401, "Not authorized"));
+      throw HttpError(401, "Not authorized");
     }
-
     req.user = user;
-    next();
   } catch (error) {
     if (
       error.name === "TokenExpiredError" ||
       error.name === "JsonWebTokenError"
     ) {
-      return next(new HttpError(401, error.message));
+      throw HttpError(401, error.message);
     }
-    return next(error);
+    throw error;
   }
+  next();
 };
 
 module.exports = authMiddleware;
