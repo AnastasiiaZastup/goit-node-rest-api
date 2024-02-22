@@ -7,6 +7,7 @@ const contactsRouter = require("./routes/contactsRouter/contactsRouter.js");
 const usersRouter = require("./routes/usersRouter/usersRouter.js");
 const path = require("path");
 const authMiddleware = require("./middleWares/authMiddleWare.js");
+require("dotenv").config();
 
 const { DB_HOST } = process.env;
 
