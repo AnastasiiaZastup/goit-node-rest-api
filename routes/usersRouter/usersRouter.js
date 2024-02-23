@@ -11,7 +11,10 @@ const {
 } = require("../../controllers/usersController");
 const { validateBody } = require("../../helpers");
 const { authMiddleware, upload } = require("../../middleWares");
-const userSchema = require("../../schemas/usersSchemas/usersSchemas");
+const {
+  userSchema,
+  resendVerify,
+} = require("../../schemas/usersSchemas/usersSchemas");
 
 router.post("/register", validateBody(userSchema), registration);
 
